@@ -1,0 +1,20 @@
+version: "3"
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo:/data/db
+    expose:
+      - "27017"
+  api:
+    build: ./packages/services/api
+    image: kotlin-scp-api:latest
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    ports:
+      - "8080:8080"
+volumes:
+  mongo:
