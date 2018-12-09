@@ -31,6 +31,11 @@
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".AddNoteActivity"
+            android:label="Add Note"
+            android:theme="@style/AppTheme.ActionBar">
+        </activity>
     </application>
 
 </manifest>
