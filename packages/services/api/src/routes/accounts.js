@@ -13,11 +13,19 @@ router.post('/', async (req, res, next) => {
         const account = new Account(req.body);
         await account.save();
 
-        res.status(201).end();
+        res.status(201);
     } catch (e) {
-        res.status(404).json({
-            error: 'Failed to create account'
-        });
+        let status = 404;
+        let error = 'Failed to create account';
+
+        if (e.name === 'MongoError' && e.code === 11000) {
+            status = 409;
+            error = 'Email address is already registered'
+        }
+
+        res.status(status).json({ error });
+    } finally {
+        res.end();
     }
 });
 
