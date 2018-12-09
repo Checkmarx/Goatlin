@@ -25,4 +25,7 @@
     <string name="prompt_name">Name</string>
     <string name="prompt_surname">Surname</string>
     <string name="prompt_confirm_password">Confirm Password</string>
+
+    <!-- Strings related to add note -->
+    <string name="save">Save</string>
 </resources>

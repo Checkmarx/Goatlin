@@ -74,10 +74,31 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         record.put("password", password)
 
         try {
-            db.insertOrThrow("accounts", null, record)
+            db.insertOrThrow(TABLE_ACCOUNTS, null, record)
         }
         catch (e: SQLException) {
             Log.e("Database signup", e.toString())
+            status = false
+        }
+        finally {
+            return status
+        }
+    }
+
+    public fun addNote (title: String, content :String, owner: Int): Boolean {
+        val db: SQLiteDatabase = this.writableDatabase
+        val record: ContentValues = ContentValues()
+        var status: Boolean = true
+
+        record.put("title", title)
+        record.put("content", content)
+        record.put("owner", owner)
+
+        try {
+            db.insertOrThrow(TABLE_NOTES, null, record)
+        }
+        catch (e: SQLException) {
+            Log.e("Add Note", e.toString())
             status = false
         }
         finally {
@@ -107,7 +128,8 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
     companion object {
         const val ASSETS_PATH = "database"
         const val DATABASE_NAME = "data"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
         const val TABLE_ACCOUNTS = "Accounts"
+        const val TABLE_NOTES = "Notes"
     }
 }
