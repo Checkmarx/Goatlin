@@ -7,6 +7,7 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.preference.PreferenceManager
 import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
@@ -55,14 +56,22 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
 
-    public fun userLogin(username: String , password: String) : Boolean {
-        var ret = "select * from ${TABLE_ACCOUNTS} where username = '" + username + "' and password = '" + password + "';"
+    /**
+     * Performs a database query to retrieve user record
+     *
+     * @param username String
+     * @param password String
+     * @return Int User record ID or -1 id record was not found
+     */
+    public fun userLogin(username: String , password: String) : Int {
+        var ret = "select id from ${TABLE_ACCOUNTS} where username = '" + username + "' and password = '" + password + "';"
         var cursor: Cursor = this.readableDatabase.rawQuery(ret, null)
         if(cursor.count == 1)
         {
-            return true
+            cursor.moveToFirst()
+            return cursor.getInt(0)
         }
-        return false
+        return -1
     }
 
     public fun createAccount(username: String, password: String) : Boolean {
@@ -128,7 +137,7 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
     companion object {
         const val ASSETS_PATH = "database"
         const val DATABASE_NAME = "data"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 4
         const val TABLE_ACCOUNTS = "Accounts"
         const val TABLE_NOTES = "Notes"
     }

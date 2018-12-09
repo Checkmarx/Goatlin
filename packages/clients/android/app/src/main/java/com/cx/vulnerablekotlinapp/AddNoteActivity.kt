@@ -1,6 +1,8 @@
 package com.cx.vulnerablekotlinapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
@@ -26,11 +28,17 @@ class AddNoteActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.save -> {
+                val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                        applicationContext.packageName, Context.MODE_PRIVATE)
                 val title: String = findViewById<EditText>(R.id.title).text.toString()
                 val content: String = findViewById<EditText>(R.id.content).text.toString()
+                val owner: Int = prefs.getInt("userId", -1)
 
-                // @todo replace owner by authenticate user ID
-                val status = DatabaseHelper(applicationContext).addNote(title, content, 1)
+                if (owner == -1) {
+                    // @todo user is not authenticated, send him to the login form
+                }
+
+                val status = DatabaseHelper(applicationContext).addNote(title, content, owner)
 
                 if (status == true) {
                     val intent = Intent(this, HomeActivity::class.java)
