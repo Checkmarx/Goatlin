@@ -1,10 +1,13 @@
 package com.cx.vulnerablekotlinapp
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
 import android.database.Cursor
+import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 
@@ -62,8 +65,30 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         return false
     }
 
+    public fun createAccount(username: String, password: String) : Boolean {
+        val db: SQLiteDatabase = this.writableDatabase
+        val record: ContentValues = ContentValues()
+        var status = true
+
+        record.put("username", username)
+        record.put("password", password)
+
+        try {
+            db.insertOrThrow("accounts", null, record)
+        }
+        catch (e: SQLException) {
+            Log.e("Database signup", e.toString())
+            status = false
+        }
+        finally {
+            return status
+        }
+    }
+
     override fun getWritableDatabase(): SQLiteDatabase {
-        throw RuntimeException("The $DATABASE_NAME database is not writable.")
+        // throw RuntimeException("The $DATABASE_NAME database is not writable.")
+        installOrUpdateIfNecessary()
+        return super.getWritableDatabase()
     }
 
     override fun getReadableDatabase(): SQLiteDatabase {
@@ -85,6 +110,4 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         const val DATABASE_VERSION = 2
         const val TABLE_ACCOUNTS = "Accounts"
     }
-
-
 }
