@@ -13,7 +13,7 @@ router.post('/', async (req, res, next) => {
         const account = new Account(req.body);
         await account.save();
 
-        res.status(201);
+        res.status(201).json({});
     } catch (e) {
         let status = 404;
         let error = 'Failed to create account';

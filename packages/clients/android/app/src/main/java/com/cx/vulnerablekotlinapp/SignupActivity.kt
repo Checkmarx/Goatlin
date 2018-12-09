@@ -1,16 +1,19 @@
 package com.cx.vulnerablekotlinapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_signup.*
 import android.util.Log
+import android.widget.Toast
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.RequestFuture
 import org.json.JSONObject
+import android.view.Gravity
+
+
 
 class SignupActivity : AppCompatActivity() {
 
@@ -26,21 +29,60 @@ class SignupActivity : AppCompatActivity() {
      */
     private fun attemptSignup() {
         // @todo confirm password and confirm_password match
-        // @todo API request
         val queue = Volley.newRequestQueue(this)
             val url: String = "http://172.25.0.3:8080/accounts"
 
+        val name: String = this.name.text.toString()
+        val email: String = this.email.text.toString()
+        val password: String = this.password.text.toString()
+
         val data:JSONObject = JSONObject()
-        data.put("name", this.name.text)
-        data.put("email", this.email.text)
-        data.put("password", this.password.text)
+        data.put("name", name)
+        data.put("email", email)
+        data.put("password", password)
 
         val request = JsonObjectRequest(Request.Method.POST, url, data,
                 Response.Listener<JSONObject> {
-                    response -> Log.v("Signup", response.toString(2))
+                    response ->
+                        val status: Boolean
+                        status = DatabaseHelper(applicationContext).createAccount(email, password)
+                        if (status == true) {
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            showError("Failed to create local account")
+                        }
                 },
-                Response.ErrorListener { Log.v("Signup", "Signup failed") })
+                Response.ErrorListener {
+                    error ->
+                        var message:String
+
+                        when (error.networkResponse.statusCode) {
+                            409 -> {
+                                message = "This account already exists"
+                                this.email.setError(message)
+                                this.email.requestFocus()
+                            }
+                            else -> {
+                                message = "Something went wrong"
+                                showError(message)
+                            }
+                        }
+                })
 
         queue.add(request)
+    }
+
+    /**
+     * Show a Toast with given error message
+     *
+     * @param message CharSequence  Error message to display
+     * @return void
+     */
+    private fun showError(message: CharSequence) {
+        val toast: Toast = Toast.makeText(this@SignupActivity, message, Toast.LENGTH_LONG)
+
+        toast.setGravity(Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL, 0, 0)
+        toast.show()
     }
 }
