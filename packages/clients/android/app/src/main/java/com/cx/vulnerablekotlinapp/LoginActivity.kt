@@ -7,8 +7,6 @@ import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
-import android.content.CursorLoader
-import android.content.Loader
 import android.database.Cursor
 import android.net.Uri
 import android.os.AsyncTask
@@ -23,7 +21,7 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
-import android.content.Intent
+import android.content.*
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
@@ -49,6 +47,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         })
 
         email_sign_in_button.setOnClickListener { attemptLogin() }
+        sign_up_button.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun populateAutoComplete() {
@@ -139,7 +141,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     private fun isPasswordValid(password: String): Boolean {
         //TODO: Replace this with your own logic
-        return password.length > 4
+        return password.length > 2
     }
 
     /**
@@ -242,9 +244,17 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 return false
             }
 
-            val success = DatabaseHelper(applicationContext).userLogin(mUsername,mPassword)
+            val userId = DatabaseHelper(applicationContext).userLogin(mUsername,mPassword)
 
-            return success
+            if (userId > -1) {
+                val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                        applicationContext.packageName, Context.MODE_PRIVATE)
+                val editor: SharedPreferences.Editor = prefs.edit()
+
+                editor.putInt("userId", userId).apply()
+            }
+
+            return userId > -1
         }
 
         override fun onPostExecute(success: Boolean?) {
