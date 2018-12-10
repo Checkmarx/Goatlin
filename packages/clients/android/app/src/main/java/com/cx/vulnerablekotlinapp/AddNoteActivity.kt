@@ -18,9 +18,9 @@ class AddNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_add)
 
-        val noteId: Int = intent.getStringExtra("NOTE_ID").toInt()
+        val noteId: String? = intent.getStringExtra("NOTE_ID")
 
-        if (noteId > 0) {
+        if (noteId != null) {
             val note: Array<String> = DatabaseHelper(applicationContext).getNote(noteId.toInt())
             findViewById<EditText>(R.id.title).setText(note[0])
             findViewById<EditText>(R.id.content).setText(note[1])
@@ -48,10 +48,11 @@ class AddNoteActivity : AppCompatActivity() {
                     // @todo user is not authenticated, send him to the login form
                 }
 
-                val noteId: Int = intent.getStringExtra("NOTE_ID").toInt()
+                val noteId: String? = intent.getStringExtra("NOTE_ID")
 
-                if (noteId > 0) {
-                    status = DatabaseHelper(applicationContext).updateNote(title, content, noteId)
+                if (noteId != null) {
+                    status = DatabaseHelper(applicationContext).updateNote(title, content,
+                            noteId.toInt())
                 }
                 else {
                     status = DatabaseHelper(applicationContext).addNote(title, content, owner)
