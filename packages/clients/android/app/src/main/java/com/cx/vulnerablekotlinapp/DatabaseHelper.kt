@@ -7,6 +7,7 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.database.sqlite.SQLiteStatement
 import android.preference.PreferenceManager
 import android.util.Log
 import java.io.File
@@ -113,6 +114,16 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         finally {
             return status
         }
+    }
+
+    public fun listNotes (owner: Int): Cursor {
+        val db: SQLiteDatabase = this.readableDatabase
+        val columns: Array<String> = arrayOf("id AS _id", "title", "content")
+        val filter: String = "owner = ?"
+        val filterValues: Array<String> = arrayOf(owner.toString())
+
+        return db.query(false, TABLE_NOTES, columns, filter, filterValues,
+                "","","","")
     }
 
     override fun getWritableDatabase(): SQLiteDatabase {
