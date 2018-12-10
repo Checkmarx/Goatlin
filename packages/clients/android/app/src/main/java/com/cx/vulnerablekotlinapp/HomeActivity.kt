@@ -32,12 +32,18 @@ class HomeActivity : AppCompatActivity() {
         if (owner == -1) {
             // @todo user is not authenticated, send him to the login form
         }
-        
+
         listView = findViewById<ListView>(R.id.list)
 
         val notes: Cursor = DatabaseHelper(this).listNotes(owner)
         val adapter = NoteCursorAdapter(this, R.layout.activity_home_note_item, notes, 0)
         listView.adapter = adapter
+
+        listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
+            val intent: Intent = Intent(applicationContext, AddNoteActivity::class.java)
+            intent.putExtra("NOTE_ID", id.toString())
+            startActivity(intent)
+        }
     }
 }
 

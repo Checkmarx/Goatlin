@@ -13,9 +13,18 @@ import android.widget.EditText
 import android.widget.Toast
 
 class AddNoteActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_add)
+
+        val noteId: Int = intent.getStringExtra("NOTE_ID").toInt()
+
+        if (noteId > 0) {
+            val note: Array<String> = DatabaseHelper(applicationContext).getNote(noteId.toInt())
+            findViewById<EditText>(R.id.title).setText(note[0])
+            findViewById<EditText>(R.id.content).setText(note[1])
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -33,12 +42,20 @@ class AddNoteActivity : AppCompatActivity() {
                 val title: String = findViewById<EditText>(R.id.title).text.toString()
                 val content: String = findViewById<EditText>(R.id.content).text.toString()
                 val owner: Int = prefs.getInt("userId", -1)
+                var status = true
 
                 if (owner == -1) {
                     // @todo user is not authenticated, send him to the login form
                 }
 
-                val status = DatabaseHelper(applicationContext).addNote(title, content, owner)
+                val noteId: Int = intent.getStringExtra("NOTE_ID").toInt()
+
+                if (noteId > 0) {
+                    status = DatabaseHelper(applicationContext).updateNote(title, content, noteId)
+                }
+                else {
+                    status = DatabaseHelper(applicationContext).addNote(title, content, owner)
+                }
 
                 if (status == true) {
                     val intent = Intent(this, HomeActivity::class.java)

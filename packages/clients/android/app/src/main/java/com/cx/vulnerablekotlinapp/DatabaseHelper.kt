@@ -116,14 +116,48 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
 
+    public fun updateNote (title: String, content :String, id: Int): Boolean {
+        val db: SQLiteDatabase = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        var status: Boolean = true
+
+        values.put("title", title)
+        values.put("content", content)
+
+
+        val count: Int = db.update(TABLE_NOTES, values, "id = ?", arrayOf(id.toString()))
+
+        return count == 1
+    }
+
     public fun listNotes (owner: Int): Cursor {
         val db: SQLiteDatabase = this.readableDatabase
-        val columns: Array<String> = arrayOf("id AS _id", "title", "content")
+        val columns: Array<String> = arrayOf("id AS _id", "title")
         val filter: String = "owner = ?"
         val filterValues: Array<String> = arrayOf(owner.toString())
 
         return db.query(false, TABLE_NOTES, columns, filter, filterValues,
                 "","","","")
+    }
+
+    public fun getNote(id: Int): Array<String> {
+        val db: SQLiteDatabase = this.readableDatabase
+        val columns: Array<String> = arrayOf("title", "content")
+        val filter: String = "id = ?"
+        val filterValues: Array<String> = arrayOf(id.toString())
+        val note: Array<String> = arrayOf("", "")
+
+        val cursor: Cursor = db.query(false, TABLE_NOTES, columns, filter, filterValues,
+                "","","","")
+
+        if (cursor.count == 1) {
+            cursor.moveToFirst()
+
+            note[0] = cursor.getString(cursor.getColumnIndex("title"))
+            note[1] = cursor.getString(cursor.getColumnIndex("content"))
+        }
+
+        return note
     }
 
     override fun getWritableDatabase(): SQLiteDatabase {
