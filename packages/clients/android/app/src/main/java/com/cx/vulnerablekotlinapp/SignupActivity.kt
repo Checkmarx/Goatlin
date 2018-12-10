@@ -30,7 +30,8 @@ class SignupActivity : AppCompatActivity() {
     private fun attemptSignup() {
         // @todo confirm password and confirm_password match
         val queue = Volley.newRequestQueue(this)
-            val url: String = "http://172.25.0.3:8080/accounts"
+        // val url: String = "http://172.25.0.3:8080/accounts"
+        val url: String = "http://192.168.1.65:8080/accounts"
 
         val name: String = this.name.text.toString()
         val email: String = this.email.text.toString()
