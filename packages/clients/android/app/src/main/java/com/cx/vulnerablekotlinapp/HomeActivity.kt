@@ -2,7 +2,6 @@ package com.cx.vulnerablekotlinapp
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -21,7 +20,7 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            val intent = Intent(this, AddNoteActivity::class.java)
+            val intent = Intent(this, EditNoteActivity::class.java)
             startActivity(intent)
         }
 
@@ -40,7 +39,7 @@ class HomeActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->
-            val intent: Intent = Intent(applicationContext, AddNoteActivity::class.java)
+            val intent: Intent = Intent(applicationContext, EditNoteActivity::class.java)
             intent.putExtra("NOTE_ID", id.toString())
             startActivity(intent)
         }

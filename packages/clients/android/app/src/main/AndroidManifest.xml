@@ -32,7 +32,7 @@
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".AddNoteActivity"
+            android:name=".EditNoteActivity"
             android:label="@string/title_activity_notes_add"
             android:theme="@style/AppTheme.ActionBar">
         </activity>

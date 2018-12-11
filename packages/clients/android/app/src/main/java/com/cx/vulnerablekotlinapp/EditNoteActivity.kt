@@ -12,11 +12,11 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
 
-class AddNoteActivity : AppCompatActivity() {
+class EditNoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_notes_add)
+        setContentView(R.layout.activity_note_edit)
 
         val noteId: String? = intent.getStringExtra("NOTE_ID")
 
@@ -63,7 +63,7 @@ class AddNoteActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 else {
-                    val toast: Toast = Toast.makeText(this@AddNoteActivity,
+                    val toast: Toast = Toast.makeText(this@EditNoteActivity,
                             "Failed to save note", Toast.LENGTH_LONG)
 
                     toast.setGravity(Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL,
