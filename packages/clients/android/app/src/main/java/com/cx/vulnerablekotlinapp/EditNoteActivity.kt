@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,18 +14,16 @@ import android.widget.EditText
 import android.widget.Toast
 
 class EditNoteActivity : AppCompatActivity() {
+    lateinit var note: Note
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_edit)
 
-        val noteId: String? = intent.getStringExtra("NOTE_ID")
+        initializeNote()
 
-        if (noteId != null) {
-            val note: Array<String> = DatabaseHelper(applicationContext).getNote(noteId.toInt())
-            findViewById<EditText>(R.id.title).setText(note[0])
-            findViewById<EditText>(R.id.content).setText(note[1])
-        }
+        findViewById<EditText>(R.id.title).setText(note.title)
+        findViewById<EditText>(R.id.content).setText(note.content)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -37,43 +36,77 @@ class EditNoteActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.save -> {
-                val prefs: SharedPreferences = applicationContext.getSharedPreferences(
-                        applicationContext.packageName, Context.MODE_PRIVATE)
-                val title: String = findViewById<EditText>(R.id.title).text.toString()
-                val content: String = findViewById<EditText>(R.id.content).text.toString()
-                val owner: Int = prefs.getInt("userId", -1)
-                var status = true
+                val saved: Boolean = saveNote()
 
-                if (owner == -1) {
-                    // @todo user is not authenticated, send him to the login form
+                if (saved == false) {
+                    showError("Could not save!")
                 }
 
-                val noteId: String? = intent.getStringExtra("NOTE_ID")
-
-                if (noteId != null) {
-                    status = DatabaseHelper(applicationContext).updateNote(title, content,
-                            noteId.toInt())
-                }
-                else {
-                    status = DatabaseHelper(applicationContext).addNote(title, content, owner)
-                }
-
-                if (status == true) {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                }
-                else {
-                    val toast: Toast = Toast.makeText(this@EditNoteActivity,
-                            "Failed to save note", Toast.LENGTH_LONG)
-
-                    toast.setGravity(Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL,
-                            0, 0)
-                    toast.show()
-                }
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
 
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Initializes internal "note" property with a new Note or one from database depending on
+     * whether intent string extra "NOTE_ID" is defined
+     */
+    private fun initializeNote() {
+        val noteId: String? = intent.getStringExtra("NOTE_ID")
+
+        if (noteId != null) {
+            try {
+                note = DatabaseHelper(applicationContext).getNote(noteId.toInt())
+            }
+            catch (e: Exception) {
+                Log.e("EditNoteActivity", e.toString())
+                note = Note("", "")
+            }
+        } else {
+            note = Note("", "")
+        }
+    }
+
+    /**
+     * Saves internal note property to database
+     */
+    private fun saveNote(): Boolean {
+        var status: Boolean
+
+        // update note
+        note.title = findViewById<EditText>(R.id.title).text.toString()
+        note.content = findViewById<EditText>(R.id.content).text.toString()
+
+        if (note.id == -1) {
+            // it's a new note
+            val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                    applicationContext.packageName, Context.MODE_PRIVATE)
+            val owner = prefs.getInt("userId", -1)
+
+            note.owner = owner
+
+            status = DatabaseHelper(applicationContext).addNote(note)
+        } else {
+            status = DatabaseHelper(applicationContext).updateNote(note)
+        }
+
+        return status
+    }
+
+    /**
+     * Show a Toast with given error message
+     *
+     * @param message CharSequence  Error message to display
+     * @return void
+     */
+    private fun showError(message: CharSequence) {
+        val toast: Toast = Toast.makeText(this@EditNoteActivity, message, Toast.LENGTH_LONG)
+
+        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 0)
+        toast.show()
     }
 }
