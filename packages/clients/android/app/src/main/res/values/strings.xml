@@ -15,7 +15,6 @@
     </string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
-    <string name="title_activity_home">HomeActivity</string>
     <string name="action_sign_up">Create Account</string>
     <string name="action_sign_up_short">Sign up</string>
     <string name="or">or</string>
@@ -26,6 +25,11 @@
     <string name="prompt_surname">Surname</string>
     <string name="prompt_confirm_password">Confirm Password</string>
 
+    <!-- Home screen related strings -->
+    <string name="title_activity_home">My Notes</string>
+
     <!-- Strings related to add note -->
+    <string name="title_activity_notes_add">Edit Note</string>
     <string name="save">Save</string>
+    <string name="your_note_text">Yout note text</string>
 </resources>
