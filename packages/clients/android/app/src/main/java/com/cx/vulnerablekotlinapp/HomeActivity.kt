@@ -23,6 +23,10 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, EditNoteActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         val prefs = applicationContext.getSharedPreferences(applicationContext.packageName,
                 Context.MODE_PRIVATE)
