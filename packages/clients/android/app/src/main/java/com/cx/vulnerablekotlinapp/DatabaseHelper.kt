@@ -95,14 +95,14 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
 
-    public fun addNote (title: String, content :String, owner: Int): Boolean {
+    public fun addNote (note: Note): Boolean {
         val db: SQLiteDatabase = this.writableDatabase
         val record: ContentValues = ContentValues()
         var status: Boolean = true
 
-        record.put("title", title)
-        record.put("content", content)
-        record.put("owner", owner)
+        record.put("title", note.title)
+        record.put("content", note.content)
+        record.put("owner", note.owner)
 
         try {
             db.insertOrThrow(TABLE_NOTES, null, record)
@@ -116,16 +116,17 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
 
-    public fun updateNote (title: String, content :String, id: Int): Boolean {
+    public fun updateNote (note: Note): Boolean {
         val db: SQLiteDatabase = this.writableDatabase
         val values: ContentValues = ContentValues()
         var status: Boolean = true
 
-        values.put("title", title)
-        values.put("content", content)
+        values.put("title", note.title)
+        values.put("content", note.content)
 
 
-        val count: Int = db.update(TABLE_NOTES, values, "id = ?", arrayOf(id.toString()))
+        val count: Int = db.update(TABLE_NOTES, values, "id = ?",
+                arrayOf(note.id.toString()))
 
         return count == 1
     }
@@ -140,22 +141,25 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
                 "","","","")
     }
 
-    public fun getNote(id: Int): Array<String> {
+    public fun getNote(id: Int): Note {
         val db: SQLiteDatabase = this.readableDatabase
         val columns: Array<String> = arrayOf("title", "content")
         val filter: String = "id = ?"
         val filterValues: Array<String> = arrayOf(id.toString())
-        val note: Array<String> = arrayOf("", "")
+        val note: Note
 
         val cursor: Cursor = db.query(false, TABLE_NOTES, columns, filter, filterValues,
                 "","","","")
 
-        if (cursor.count == 1) {
-            cursor.moveToFirst()
-
-            note[0] = cursor.getString(cursor.getColumnIndex("title"))
-            note[1] = cursor.getString(cursor.getColumnIndex("content"))
+        if (cursor.count != 1) {
+            throw Exception("Note not found")
         }
+
+        cursor.moveToFirst()
+
+        note = Note(cursor.getString(cursor.getColumnIndex("title")),
+                cursor.getString(cursor.getColumnIndex("content")))
+        note.id = id
 
         return note
     }
