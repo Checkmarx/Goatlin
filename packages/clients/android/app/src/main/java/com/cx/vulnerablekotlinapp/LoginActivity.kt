@@ -22,6 +22,7 @@ import android.widget.TextView
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
 import android.content.*
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**

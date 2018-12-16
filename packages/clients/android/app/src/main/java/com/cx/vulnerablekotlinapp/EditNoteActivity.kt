@@ -1,7 +1,6 @@
 package com.cx.vulnerablekotlinapp
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -12,6 +11,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import com.cx.vulnerablekotlinapp.models.Note
 
 class EditNoteActivity : AppCompatActivity() {
     lateinit var note: Note
