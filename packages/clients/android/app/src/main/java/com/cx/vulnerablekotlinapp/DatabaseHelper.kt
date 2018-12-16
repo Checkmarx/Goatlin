@@ -95,6 +95,13 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
 
+    public fun listAccounts(): Cursor{
+        val db: SQLiteDatabase = this.readableDatabase
+        val columns: Array<String> = arrayOf("id AS _id", "username","password")
+        return db.query(TABLE_ACCOUNTS, columns, null, null,
+                "","","","")
+    }
+
     public fun addNote (note: Note): Boolean {
         val db: SQLiteDatabase = this.writableDatabase
         val record: ContentValues = ContentValues()

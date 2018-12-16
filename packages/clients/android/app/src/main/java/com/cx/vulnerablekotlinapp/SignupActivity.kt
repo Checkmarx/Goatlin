@@ -1,5 +1,6 @@
 package com.cx.vulnerablekotlinapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -31,7 +32,8 @@ class SignupActivity : AppCompatActivity() {
         // @todo confirm password and confirm_password match
         val queue = Volley.newRequestQueue(this)
         // val url: String = "http://172.25.0.3:8080/accounts"
-        val url: String = "http://192.168.1.65:8080/accounts"
+        //val url: String = "http://192.168.1.65:8080/accounts"
+        val url:String = "http://" + this.getServerIPAddress() + ":" + this.getServerPort() + "/accounts"
 
         val name: String = this.name.text.toString()
         val email: String = this.email.text.toString()
@@ -48,6 +50,8 @@ class SignupActivity : AppCompatActivity() {
                         val status: Boolean
                         status = DatabaseHelper(applicationContext).createAccount(email, password)
                         if (status == true) {
+                            Log.i("SignupActivity","Account creation")
+                            Log.i("SingUpActivity", "$email : $password")
                             val intent = Intent(this, LoginActivity::class.java)
                             startActivity(intent)
                         } else {
@@ -74,6 +78,17 @@ class SignupActivity : AppCompatActivity() {
         queue.add(request)
     }
 
+    private fun getServerIPAddress (): String? {
+        val prefs = applicationContext.getSharedPreferences(applicationContext.packageName,
+                Context.MODE_PRIVATE)
+        return prefs!!.getString("ip_address","127.0.0.1")
+    }
+
+    private fun getServerPort ():String? {
+        val prefs = applicationContext.getSharedPreferences(applicationContext.packageName,
+                Context.MODE_PRIVATE)
+        return prefs!!.getString("port","8080")
+    }
     /**
      * Show a Toast with given error message
      *

