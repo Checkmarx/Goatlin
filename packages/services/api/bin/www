@@ -6,7 +6,9 @@
 
 const app = require('../src/app');
 const debug = require('debug')('api:server');
-const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Get port from environment and store in Express.
@@ -17,8 +19,12 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+const sslDirectory = path.join(__dirname,'..','ssl');
+const privateKey = fs.readFileSync(path.join(sslDirectory, 'server.key'), 'utf8');
+const certficate = fs.readFileSync(path.join(sslDirectory, 'server.crt'), 'utf8');
+const credentials = {key: privateKey, cert: certficate};
 
-var server = http.createServer(app);
+var server = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.
