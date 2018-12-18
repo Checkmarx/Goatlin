@@ -6,6 +6,7 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 
 class NotesProvider : ContentProvider() {
 

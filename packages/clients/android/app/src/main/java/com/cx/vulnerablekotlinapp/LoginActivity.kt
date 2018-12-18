@@ -3,8 +3,6 @@ package com.cx.vulnerablekotlinapp
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
 import android.database.Cursor
@@ -18,18 +16,20 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
-
 import java.util.ArrayList
-import android.Manifest.permission.READ_CONTACTS
 import android.content.*
+import android.support.annotation.RequiresApi
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
  * A login screen that offers login via email/password.
  */
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -38,6 +38,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        PreferenceHelper.init(applicationContext)
+
         setContentView(R.layout.activity_login)
         // Set up the login form.
         populateAutoComplete()
@@ -71,7 +73,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     private fun populateAutoComplete() {
         loaderManager.initLoader(0, null, this)
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -164,6 +165,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<Cursor> {
         return CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.

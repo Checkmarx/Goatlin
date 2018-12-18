@@ -10,6 +10,7 @@ import android.widget.*
 
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.TextView
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var listView: ListView
@@ -23,6 +24,10 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, EditNoteActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         val prefs = applicationContext.getSharedPreferences(applicationContext.packageName,
                 Context.MODE_PRIVATE)

@@ -6,11 +6,12 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import android.database.sqlite.SQLiteQueryBuilder
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 
 
 class AccountProvider : ContentProvider() {
 
-    private lateinit var database:DatabaseHelper
+    private lateinit var database: DatabaseHelper
 
     private val ACCOUNTS = 1
     private val ACCOUNTS_ID = 2
