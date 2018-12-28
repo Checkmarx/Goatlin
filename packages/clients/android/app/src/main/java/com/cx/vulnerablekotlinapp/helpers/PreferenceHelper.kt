@@ -7,7 +7,9 @@ object PreferenceHelper {
     private lateinit var sharedPreferences: SharedPreferences
 
     public fun init(context: Context) {
-        sharedPreferences = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+        if (!this::sharedPreferences.isInitialized) {
+            sharedPreferences = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+        }
     }
 
     public fun getString(key: String, default: String?): String {
