@@ -7,7 +7,7 @@ object PreferenceHelper {
     private lateinit var sharedPreferences: SharedPreferences
 
     public fun init(context: Context) {
-        if (!this::sharedPreferences.isInitialized) {
+            if (!this::sharedPreferences.isInitialized) {
             sharedPreferences = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
         }
     }
