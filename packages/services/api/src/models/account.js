@@ -3,17 +3,16 @@ const mongoose = require('mongoose');
 const accountSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        require: true,
-        index: true,
+        required: true,
         unique: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     createdAt: {
         type: Date,
