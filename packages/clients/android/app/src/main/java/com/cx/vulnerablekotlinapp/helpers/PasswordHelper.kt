@@ -1,6 +1,6 @@
 package com.cx.vulnerablekotlinapp.helpers
 
-class PasswordHelper {
+object PasswordHelper {
 
     /**
      * Performs given password validation according to OWASP proper password strength
@@ -55,24 +55,24 @@ class PasswordHelper {
      * Whether given password has at least one upper case letter
      */
     private fun hasAtLeastOneUppercaseLetter (password: String): Boolean {
-        val regex: Regex = Regex("[A-Z]")
-        return password.matches(regex)
+        val regex: Regex = Regex("[A-Z]+")
+        return regex.containsMatchIn(password)
     }
 
     /**
      * Whether given password has at least one lower case letter
      */
     private fun hasAtLeastOneLowercaseLetter (password: String): Boolean {
-        val regex: Regex = Regex("[a-z]")
-        return password.matches(regex)
+        val regex: Regex = Regex("[a-z]+")
+        return regex.containsMatchIn(password)
     }
 
     /**
      * Whether given password has at least one digit
      */
     private fun hasAtLeastOneDigit (password: String): Boolean {
-        val regex: Regex = Regex("[0-9]")
-        return password.matches(regex)
+        val regex: Regex = Regex("[0-9]+")
+        return regex.containsMatchIn(password)
     }
 
     /**
@@ -80,8 +80,8 @@ class PasswordHelper {
      * @see https://www.owasp.org/index.php/Password_special_characters
      */
     private fun hasAtLeastOneSpecialChar (password: String): Boolean {
-        val regex: Regex = Regex("[ !\"#\$%&'()*+,-.\\/:;<=>?@\\[\\\\\\]^_`{|}~]")
-        return password.matches(regex)
+        val regex: Regex = Regex("[ !\"#\$%&'()*+,-.\\/:;<=>?@\\[\\\\\\]^_`{|}~]+")
+        return regex.containsMatchIn(password)
     }
 
     /**
@@ -89,6 +89,6 @@ class PasswordHelper {
      */
     private fun noMoreThanTwoIdenticalCharsInARow(password: String): Boolean {
         val regex: Regex = Regex("^((.)\\2?(?!\\2))+\$", RegexOption.IGNORE_CASE)
-        return password.matches(regex)
+        return regex.containsMatchIn(password)
     }
 }
