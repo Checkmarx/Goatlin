@@ -1,6 +1,5 @@
 package com.cx.vulnerablekotlinapp
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +8,7 @@ import kotlinx.android.synthetic.main.activity_signup.*
 import android.widget.Toast
 import android.view.Gravity
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import com.cx.vulnerablekotlinapp.api.model.Account
 import com.cx.vulnerablekotlinapp.api.service.Client
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
@@ -32,10 +32,16 @@ class SignupActivity : AppCompatActivity() {
      * Attempts to create a new account on back-end
      */
     private fun attemptSignup() {
-        // @todo confirm password and confirm_password match
         val name: String = this.name.text.toString()
         val email: String = this.email.text.toString()
         val password: String = this.password.text.toString()
+        val confirmPassword: String = this.confirmPassword.text.toString()
+
+        if (confirmPassword != password) {
+            this.confirmPassword.error = "Passwords don't match"
+            this.confirmPassword.requestFocus()
+            return;
+        }
 
         val account: Account = Account(name, email, password)
 
