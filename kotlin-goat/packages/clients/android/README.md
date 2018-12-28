@@ -1,1 +1,0 @@
-Vulnerable Kotlin application
