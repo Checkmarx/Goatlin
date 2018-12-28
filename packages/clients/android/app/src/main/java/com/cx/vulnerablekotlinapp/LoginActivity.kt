@@ -26,6 +26,7 @@ import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
 import com.cx.vulnerablekotlinapp.models.Account
 import kotlinx.android.synthetic.main.activity_login.*
+import org.mindrot.jbcrypt.BCrypt
 
 /**
  * A login screen that offers login via email/password.
@@ -221,7 +222,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             else {
 
                 val account:Account = DatabaseHelper(applicationContext).getAccount(mUsername)
-                if (mPassword == account.password) {
+                if (BCrypt.checkpw(mPassword, account.password)) {
                     val prefs: SharedPreferences = applicationContext.getSharedPreferences(
                             applicationContext.packageName, Context.MODE_PRIVATE)
                     val editor: SharedPreferences.Editor = prefs.edit()
