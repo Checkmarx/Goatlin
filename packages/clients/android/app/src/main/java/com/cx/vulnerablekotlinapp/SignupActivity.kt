@@ -12,6 +12,7 @@ import android.widget.EditText
 import com.cx.vulnerablekotlinapp.api.model.Account
 import com.cx.vulnerablekotlinapp.api.service.Client
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import com.cx.vulnerablekotlinapp.helpers.PasswordHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +37,17 @@ class SignupActivity : AppCompatActivity() {
         val email: String = this.email.text.toString()
         val password: String = this.password.text.toString()
         val confirmPassword: String = this.confirmPassword.text.toString()
+
+        // test password strength
+        if (!PasswordHelper.strength(password)) {
+            this.password.error = """|Weak password. Please use:
+                                  |* both upper and lower case letters
+                                  |* numbers
+                                  |* special characters (e.g. !"#$%&')
+                                  |* from 10 to 128 characters sequence""".trimMargin()
+            this.password.requestFocus()
+            return;
+        }
 
         if (confirmPassword != password) {
             this.confirmPassword.error = "Passwords don't match"
