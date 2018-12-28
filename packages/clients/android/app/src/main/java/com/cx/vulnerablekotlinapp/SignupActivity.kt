@@ -8,11 +8,11 @@ import kotlinx.android.synthetic.main.activity_signup.*
 import android.widget.Toast
 import android.view.Gravity
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import com.cx.vulnerablekotlinapp.api.model.Account
 import com.cx.vulnerablekotlinapp.api.service.Client
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import com.cx.vulnerablekotlinapp.helpers.PasswordHelper
+import org.mindrot.jbcrypt.BCrypt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,7 +55,9 @@ class SignupActivity : AppCompatActivity() {
             return;
         }
 
-        val account: Account = Account(name, email, password)
+        // hashing password
+        val hashedPassword: String = BCrypt.hashpw(password, BCrypt.gensalt())
+        val account: Account = Account(name, email, hashedPassword)
 
         val call: Call<Void> = apiService.signup(account)
 
