@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.vulnerablekotlinapp.helpers
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,9 +7,8 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteStatement
-import android.preference.PreferenceManager
 import android.util.Log
+import com.cx.vulnerablekotlinapp.models.Note
 import java.io.File
 import java.io.FileOutputStream
 
@@ -93,6 +92,13 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         finally {
             return status
         }
+    }
+
+    public fun listAccounts(): Cursor{
+        val db: SQLiteDatabase = this.readableDatabase
+        val columns: Array<String> = arrayOf("id AS _id", "username","password")
+        return db.query(TABLE_ACCOUNTS, columns, null, null,
+                "","","","")
     }
 
     public fun addNote (note: Note): Boolean {

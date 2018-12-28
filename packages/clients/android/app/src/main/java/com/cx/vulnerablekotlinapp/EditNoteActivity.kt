@@ -1,8 +1,5 @@
 package com.cx.vulnerablekotlinapp
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -12,6 +9,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
+import com.cx.vulnerablekotlinapp.models.Note
 
 class EditNoteActivity : AppCompatActivity() {
     lateinit var note: Note
@@ -84,9 +84,7 @@ class EditNoteActivity : AppCompatActivity() {
 
         if (note.id == -1) {
             // it's a new note
-            val prefs: SharedPreferences = applicationContext.getSharedPreferences(
-                    applicationContext.packageName, Context.MODE_PRIVATE)
-            val owner = prefs.getInt("userId", -1)
+            val owner = PreferenceHelper.getInt("userId", -1)
 
             note.owner = owner
 
