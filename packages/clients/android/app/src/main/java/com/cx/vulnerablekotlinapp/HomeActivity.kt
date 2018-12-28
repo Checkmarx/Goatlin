@@ -10,6 +10,7 @@ import android.widget.*
 
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.TextView
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var listView: ListView

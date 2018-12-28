@@ -1,5 +1,6 @@
 package com.cx.vulnerablekotlinapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +11,7 @@ import android.view.Gravity
 import android.widget.AutoCompleteTextView
 import com.cx.vulnerablekotlinapp.api.model.Account
 import com.cx.vulnerablekotlinapp.api.service.Client
-import okhttp3.CertificatePinner
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
