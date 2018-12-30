@@ -10,6 +10,7 @@ import android.widget.*
 
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.TextView
+import com.cx.vulnerablekotlinapp.helpers.CryptoHelper
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 
 class HomeActivity : AppCompatActivity() {
@@ -55,7 +56,7 @@ class NoteCursorAdapter(context: Context, layout: Int, cursor: Cursor, flags: In
 
     override fun bindView(view: View, context: Context, cursor: Cursor) {
         val title = view.findViewById(R.id.title) as TextView
-        title.text = cursor.getString(cursor.getColumnIndex("title"))
+        title.text = CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("title")))
     }
 
 }
