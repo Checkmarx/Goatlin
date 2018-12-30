@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
+import com.cx.vulnerablekotlinapp.helpers.CryptoHelper
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
 import com.cx.vulnerablekotlinapp.models.Note
@@ -79,8 +80,8 @@ class EditNoteActivity : AppCompatActivity() {
         var status: Boolean
 
         // update note
-        note.title = findViewById<EditText>(R.id.title).text.toString()
-        note.content = findViewById<EditText>(R.id.content).text.toString()
+        note.title = CryptoHelper.encrypt(findViewById<EditText>(R.id.title).text.toString())
+        note.content = CryptoHelper.encrypt(findViewById<EditText>(R.id.content).text.toString())
 
         if (note.id == -1) {
             // it's a new note
