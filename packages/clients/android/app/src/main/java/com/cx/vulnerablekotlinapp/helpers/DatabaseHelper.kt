@@ -167,8 +167,8 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
 
         cursor.moveToFirst()
 
-        note = Note(CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("title"))),
-                CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("content"))))
+        note = Note(cursor.getString(cursor.getColumnIndex("title")),
+                cursor.getString(cursor.getColumnIndex("content")))
         note.id = id
 
         return note
@@ -196,7 +196,7 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
     companion object {
         const val ASSETS_PATH = "database"
         const val DATABASE_NAME = "data"
-        const val DATABASE_VERSION = 4
+        const val DATABASE_VERSION = 5
         const val TABLE_ACCOUNTS = "Accounts"
         const val TABLE_NOTES = "Notes"
     }

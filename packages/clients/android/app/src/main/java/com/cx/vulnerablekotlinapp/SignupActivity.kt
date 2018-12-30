@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import com.cx.vulnerablekotlinapp.api.model.Account
 import com.cx.vulnerablekotlinapp.api.service.Client
+import com.cx.vulnerablekotlinapp.helpers.CryptoHelper
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,6 +60,8 @@ class SignupActivity : AppCompatActivity() {
                 when (response.code()) {
                     201 -> {
                         if (createLocalAccount(account)) {
+                            CryptoHelper.createUserKey(account.email)
+
                             val intent = Intent(this@SignupActivity,
                                     LoginActivity::class.java)
 

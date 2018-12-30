@@ -227,6 +227,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                     val editor: SharedPreferences.Editor = prefs.edit()
 
                     editor.putInt("userId", account.id).apply()
+                    editor.putString("userName", account.username).apply()
                 }
 
                 return account.id > -1

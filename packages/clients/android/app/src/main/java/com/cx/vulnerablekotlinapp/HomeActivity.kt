@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.TextView
 import com.cx.vulnerablekotlinapp.helpers.CryptoHelper
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var listView: ListView
@@ -55,8 +56,9 @@ class HomeActivity : AppCompatActivity() {
 class NoteCursorAdapter(context: Context, layout: Int, cursor: Cursor, flags: Int) : ResourceCursorAdapter(context, layout, cursor, flags) {
 
     override fun bindView(view: View, context: Context, cursor: Cursor) {
+        val ownerName: String = PreferenceHelper.getString("userName", "")
         val title = view.findViewById(R.id.title) as TextView
-        title.text = CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("title")))
+        title.text = CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("title")), ownerName)
     }
 
 }

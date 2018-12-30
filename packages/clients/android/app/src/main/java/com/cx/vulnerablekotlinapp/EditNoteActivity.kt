@@ -16,11 +16,13 @@ import com.cx.vulnerablekotlinapp.models.Note
 
 class EditNoteActivity : AppCompatActivity() {
     lateinit var note: Note
+    lateinit var ownerName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_edit)
 
+        ownerName = PreferenceHelper.getString("userName", "")
         initializeNote()
 
         findViewById<EditText>(R.id.title).setText(note.title)
@@ -63,6 +65,8 @@ class EditNoteActivity : AppCompatActivity() {
         if (noteId != null) {
             try {
                 note = DatabaseHelper(applicationContext).getNote(noteId.toInt())
+                note.title = CryptoHelper.decrypt(note.title, ownerName)
+                note.content = CryptoHelper.decrypt(note.content, ownerName)
             }
             catch (e: Exception) {
                 Log.e("EditNoteActivity", e.toString())
@@ -79,14 +83,17 @@ class EditNoteActivity : AppCompatActivity() {
     private fun saveNote(): Boolean {
         var status: Boolean
 
+        // required to decrypt
+        val ownerName: String = PreferenceHelper.getString("userName", "")
+        // @todo handle empty ownerName
+
         // update note
-        note.title = CryptoHelper.encrypt(findViewById<EditText>(R.id.title).text.toString())
-        note.content = CryptoHelper.encrypt(findViewById<EditText>(R.id.content).text.toString())
+        note.title = CryptoHelper.encrypt(findViewById<EditText>(R.id.title).text.toString(), ownerName)
+        note.content = CryptoHelper.encrypt(findViewById<EditText>(R.id.content).text.toString(), ownerName)
 
         if (note.id == -1) {
             // it's a new note
             val owner = PreferenceHelper.getInt("userId", -1)
-
             note.owner = owner
 
             status = DatabaseHelper(applicationContext).addNote(note)
