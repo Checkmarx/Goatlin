@@ -8,6 +8,7 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.cx.vulnerablekotlinapp.models.Account
 import com.cx.vulnerablekotlinapp.models.Note
 import java.io.File
 import java.io.FileOutputStream
@@ -56,24 +57,6 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
 
-    /**
-     * Performs a database query to retrieve user record
-     *
-     * @param username String
-     * @param password String
-     * @return Int User record ID or -1 id record was not found
-     */
-    public fun userLogin(username: String , password: String) : Int {
-        var ret = "select id from ${TABLE_ACCOUNTS} where username = '" + username + "' and password = '" + password + "';"
-        var cursor: Cursor = this.readableDatabase.rawQuery(ret, null)
-        if(cursor.count == 1)
-        {
-            cursor.moveToFirst()
-            return cursor.getInt(0)
-        }
-        return -1
-    }
-
     public fun createAccount(username: String, password: String) : Boolean {
         val db: SQLiteDatabase = this.writableDatabase
         val record: ContentValues = ContentValues()
@@ -92,6 +75,27 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
         finally {
             return status
         }
+    }
+
+    public fun getAccount(username: String): Account {
+        val db: SQLiteDatabase = this.readableDatabase
+        val columns: Array<String> = arrayOf("id", "username", "password")
+        val filter: String = "username = ?"
+        val filterValues: Array<String> = arrayOf(username)
+        val account: Account
+
+        val cursor: Cursor = db.query(false, TABLE_ACCOUNTS, columns, filter, filterValues,
+                "","","","")
+
+        if (cursor.count != 1) {
+            throw Exception("Account not found")
+        }
+
+        cursor.moveToFirst()
+
+        account = Account(cursor)
+
+        return account
     }
 
     public fun listAccounts(): Cursor{

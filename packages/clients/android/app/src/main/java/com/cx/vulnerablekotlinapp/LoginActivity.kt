@@ -24,6 +24,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
+import com.cx.vulnerablekotlinapp.models.Account
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
@@ -75,9 +76,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     }
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Attempts to sign in the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the errors are presented and
+     * no actual login attempt is made.
      */
     private fun attemptLogin() {
         if (mAuthTask != null) {
@@ -96,8 +97,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         var focusView: View? = null
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(passwordStr) && !isPasswordValid(passwordStr)) {
-            password.error = getString(R.string.error_invalid_password)
+        if (TextUtils.isEmpty(passwordStr)) {
+            password.error = getString(R.string.error_field_required)
             focusView = password
             cancel = true
         }
@@ -120,11 +121,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             mAuthTask = UserLoginTask(userStr, passwordStr)
             mAuthTask!!.execute(null as Void?)
         }
-    }
-
-    private fun isPasswordValid(password: String): Boolean {
-        //TODO: Replace this with your own logic
-        return password.length > 2
     }
 
     /**
@@ -219,31 +215,21 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     inner class UserLoginTask internal constructor(private val mUsername: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000)
-            } catch (e: InterruptedException) {
-                return false
-            }
-
-            //TODO : Add backdoor account here
             if ((mUsername == "Supervisor") and (mPassword == "MySuperSecretPassword123!")){
                 return true
             }
             else {
 
-                val userId = DatabaseHelper(applicationContext).userLogin(mUsername, mPassword)
-
-                if (userId > -1) {
+                val account:Account = DatabaseHelper(applicationContext).getAccount(mUsername)
+                if (mPassword == account.password) {
                     val prefs: SharedPreferences = applicationContext.getSharedPreferences(
                             applicationContext.packageName, Context.MODE_PRIVATE)
                     val editor: SharedPreferences.Editor = prefs.edit()
 
-                    editor.putInt("userId", userId).apply()
+                    editor.putInt("userId", account.id).apply()
                 }
 
-                return userId > -1
+                return account.id > -1
             }
         }
 
