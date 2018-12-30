@@ -167,8 +167,8 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
 
         cursor.moveToFirst()
 
-        note = Note(cursor.getString(cursor.getColumnIndex("title")),
-                cursor.getString(cursor.getColumnIndex("content")))
+        note = Note(CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("title"))),
+                CryptoHelper.decrypt(cursor.getString(cursor.getColumnIndex("content"))))
         note.id = id
 
         return note
