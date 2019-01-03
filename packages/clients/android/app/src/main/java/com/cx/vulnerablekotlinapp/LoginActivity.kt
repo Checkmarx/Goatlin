@@ -19,11 +19,14 @@ import android.widget.TextView
 import java.util.ArrayList
 import android.content.*
 import android.support.annotation.RequiresApi
+import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
+import com.cx.vulnerablekotlinapp.helpers.RootDetectionHelper
 import com.cx.vulnerablekotlinapp.models.Account
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -39,9 +42,14 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        if (RootDetectionHelper.check(applicationContext)) {
+            forceCloseApp()
+        }
+
         PreferenceHelper.init(applicationContext)
 
-        setContentView(R.layout.activity_login)
         // Set up the login form.
         populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
@@ -73,6 +81,26 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     private fun populateAutoComplete() {
         loaderManager.initLoader(0, null, this)
+    }
+
+    /**
+     * Forces application to close due to "Unsafe device" detection.
+     * A dialog is rendered with such information
+     */
+    private fun forceCloseApp() {
+        val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        dialog
+                .setMessage("The application can not run on rooted devices")
+                .setCancelable(false)
+                .setPositiveButton("Close Application", DialogInterface.OnClickListener {
+                    _, _ -> finish()
+                })
+
+        val alert: AlertDialog = dialog.create()
+
+        alert.setTitle("Unsafe Device")
+        alert.show()
     }
 
     /**
