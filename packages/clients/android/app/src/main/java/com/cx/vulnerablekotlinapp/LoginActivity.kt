@@ -216,26 +216,21 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     inner class UserLoginTask internal constructor(private val mUsername: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            if ((mUsername == "Supervisor") and (mPassword == "MySuperSecretPassword123!")){
-                return true
-            }
-            else {
-                try {
-                    val account: Account = DatabaseHelper(applicationContext).getAccount(mUsername)
+            try {
+                val account: Account = DatabaseHelper(applicationContext).getAccount(mUsername)
 
-                    if (mPassword == account.password) {
-                        val prefs: SharedPreferences = applicationContext.getSharedPreferences(
-                                applicationContext.packageName, Context.MODE_PRIVATE)
-                        val editor: SharedPreferences.Editor = prefs.edit()
+                if (mPassword == account.password) {
+                    val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                            applicationContext.packageName, Context.MODE_PRIVATE)
+                    val editor: SharedPreferences.Editor = prefs.edit()
 
-                        editor.putInt("userId", account.id).apply()
-                        editor.putString("userEmail", mUsername).apply()
-                    }
-
-                    return account.id > -1
-                } catch(e: Exception){
-                    return false
+                    editor.putInt("userId", account.id).apply()
+                    editor.putString("userEmail", mUsername).apply()
                 }
+
+                return account.id > -1
+            } catch(e: Exception){
+                return false
             }
         }
 
