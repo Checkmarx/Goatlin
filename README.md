@@ -1,7 +1,7 @@
-Kotlin Goat
+Goatlin
 ===========
 
-**Kotlin Goat** is a deliberately insecure Mobile application developed by
+**Goatlin** is a deliberately insecure Mobile application developed by
 Checkmarx Security Research Team to support [Kotlin Secure Coding Practices][1].
 
 This repository contains both the Android mobile application
