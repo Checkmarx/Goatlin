@@ -1,4 +1,4 @@
-Kotlin Goat
+Goatlin
 ===========
 
 **Kotlin Goat** is a deliberately insecure Mobile application developed by
