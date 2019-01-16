@@ -1,4 +1,4 @@
-Goatlin
+Kotlin Goat
 ===========
 
 **Kotlin Goat** is a deliberately insecure Mobile application developed by
@@ -24,8 +24,8 @@ To play with the mobile application you should have the following tools:
    docker-compose up -d
    ```
 2. Start Android Studio and load the project at `packages/clients/android`
-   2.1 Choose "Run" > "Run 'app'" (Shift + F10)
-   2.2 Select one of the available Virtual Devices
+   * Choose "Run" > "Run 'app'" (Shift + F10)
+   * Select one of the available Virtual Devices
 
 [1]: https://github.com/PauloASilva/Kotlin-SCP
 [2]: https://developer.android.com/studio/
