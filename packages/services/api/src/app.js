@@ -14,7 +14,7 @@ app.use(logger('dev'));
 app.use(express.json());
 
 app.use('/', indexRouter);
-app.use('/accounts', accountsRouter);
+app.use('/', accountsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

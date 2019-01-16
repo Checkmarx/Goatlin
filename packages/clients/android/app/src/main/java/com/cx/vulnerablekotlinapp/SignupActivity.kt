@@ -3,19 +3,23 @@ package com.cx.vulnerablekotlinapp
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.activity_signup.*
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_signup.*
 import android.widget.Toast
-import com.android.volley.toolbox.JsonObjectRequest
-import org.json.JSONObject
 import android.view.Gravity
-
-
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import com.cx.vulnerablekotlinapp.api.model.Account
+import com.cx.vulnerablekotlinapp.api.service.Client
+import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SignupActivity : AppCompatActivity() {
+    private val apiService by lazy {
+        Client.create()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,57 +32,65 @@ class SignupActivity : AppCompatActivity() {
      * Attempts to create a new account on back-end
      */
     private fun attemptSignup() {
-        // @todo confirm password and confirm_password match
-        val queue = Volley.newRequestQueue(this)
-        // val url: String = "http://172.25.0.3:8080/accounts"
-        val url: String = "http://192.168.1.65:8080/accounts"
-
         val name: String = this.name.text.toString()
         val email: String = this.email.text.toString()
         val password: String = this.password.text.toString()
+        val confirmPassword: String = this.confirmPassword.text.toString()
 
-        val data:JSONObject = JSONObject()
-        data.put("name", name)
-        data.put("email", email)
-        data.put("password", password)
+        if (confirmPassword != password) {
+            this.confirmPassword.error = "Passwords don't match"
+            this.confirmPassword.requestFocus()
+            return;
+        }
 
-        val request = JsonObjectRequest(Request.Method.POST, url, data,
-                Response.Listener<JSONObject> {
-                    response ->
-                        val status: Boolean
-                        status = DatabaseHelper(applicationContext).createAccount(email, password)
-                        if (status == true) {
-                            val intent = Intent(this, LoginActivity::class.java)
+        val account: Account = Account(name, email, password)
+
+        val call: Call<Void> = apiService.signup(account)
+
+        call.enqueue(object: Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("SingupActivity", t.message.toString())
+            }
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                val emailField: AutoCompleteTextView = findViewById(R.id.email)
+                var message:String = ""
+
+                when (response.code()) {
+                    201 -> {
+                        if (createLocalAccount(account)) {
+                            val intent = Intent(this@SignupActivity,
+                                    LoginActivity::class.java)
+
                             startActivity(intent)
                         } else {
-                            showError("Failed to create local account")
+                            message = "Failed to create local account"
                         }
-                },
-                Response.ErrorListener {
-                    error ->
-                        var message:String
+                    }
+                    409 -> {
+                        message = "This account already exists"
+                        emailField.error = message
+                        emailField.requestFocus()
+                    }
+                    else -> {
+                        message = "Failed to create account"
+                    }
+                }
 
-                        when (error.networkResponse.statusCode) {
-                            409 -> {
-                                message = "This account already exists"
-                                this.email.setError(message)
-                                this.email.requestFocus()
-                            }
-                            else -> {
-                                message = "Something went wrong"
-                                showError(message)
-                            }
-                        }
-                })
-
-        queue.add(request)
+                showError(message)
+            }
+        })
     }
 
     /**
-     * Show a Toast with given error message
-     *
-     * @param message CharSequence  Error message to display
-     * @return void
+     * Creates local account
+     */
+    private fun createLocalAccount(account: Account): Boolean {
+        return DatabaseHelper(applicationContext).createAccount(account.email, account.password)
+    }
+
+    /**
+     * Shows a Toast with given message
      */
     private fun showError(message: CharSequence) {
         val toast: Toast = Toast.makeText(this@SignupActivity, message, Toast.LENGTH_LONG)
