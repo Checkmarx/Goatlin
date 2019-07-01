@@ -32,7 +32,7 @@ interface Client {
         fun create(): Client {
             val hostname: String = PreferenceHelper.getString("ip_address", "127.0.0.1")
             val port: String = PreferenceHelper.getString("port", "8080")
-            val baseUrl: String = "http://${hostname}:${port}"
+            val baseUrl: String = "https://${hostname}:${port}"
 
             val certificatePinner = CertificatePinner.Builder()
                     .add(baseUrl, "sha256/5Kl14sIBRoArZ8ujwNLWoLOI1QmsvE58nmXTO/9GSJw=")
