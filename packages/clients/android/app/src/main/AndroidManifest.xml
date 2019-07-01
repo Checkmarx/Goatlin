@@ -52,7 +52,7 @@
             android:exported="true" />
         <provider
             android:name=".NotesProvider"
-            android:authorities="com.vx.vulnerablekotlinapp.notes"
+            android:authorities="com.cx.vulnerablekotlinapp.notes"
             android:enabled="true"
             android:exported="true"></provider>
     </application>
