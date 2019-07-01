@@ -196,7 +196,7 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
     companion object {
         const val ASSETS_PATH = "database"
         const val DATABASE_NAME = "data"
-        const val DATABASE_VERSION = 5
+        const val DATABASE_VERSION = 4
         const val TABLE_ACCOUNTS = "Accounts"
         const val TABLE_NOTES = "Notes"
     }
