@@ -143,7 +143,7 @@ class DatabaseHelper (val context: Context) : SQLiteOpenHelper(context, DATABASE
 
     public fun listNotes (owner: Int): Cursor {
         val db: SQLiteDatabase = this.readableDatabase
-        val columns: Array<String> = arrayOf("id AS _id", "title")
+        val columns: Array<String> = arrayOf("id AS _id", "title", "content", "createdAt")
         val filter: String = "owner = ?"
         val filterValues: Array<String> = arrayOf(owner.toString())
 

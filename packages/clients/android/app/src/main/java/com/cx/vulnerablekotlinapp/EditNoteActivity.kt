@@ -16,13 +16,13 @@ import com.cx.vulnerablekotlinapp.models.Note
 
 class EditNoteActivity : AppCompatActivity() {
     lateinit var note: Note
-    lateinit var ownerName: String
+    lateinit var ownerEmail: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_edit)
 
-        ownerName = PreferenceHelper.getString("userName", "")
+        ownerEmail = PreferenceHelper.getString("userEmail", "")
         initializeNote()
 
         findViewById<EditText>(R.id.title).setText(note.title)
@@ -65,8 +65,8 @@ class EditNoteActivity : AppCompatActivity() {
         if (noteId != null) {
             try {
                 note = DatabaseHelper(applicationContext).getNote(noteId.toInt())
-                note.title = CryptoHelper.decrypt(note.title, ownerName)
-                note.content = CryptoHelper.decrypt(note.content, ownerName)
+                note.title = CryptoHelper.decrypt(note.title, ownerEmail)
+                note.content = CryptoHelper.decrypt(note.content, ownerEmail)
             }
             catch (e: Exception) {
                 Log.e("EditNoteActivity", e.toString())
@@ -84,12 +84,12 @@ class EditNoteActivity : AppCompatActivity() {
         var status: Boolean
 
         // required to decrypt
-        val ownerName: String = PreferenceHelper.getString("userName", "")
+        val ownerEmail: String = PreferenceHelper.getString("userEmail", "")
         // @todo handle empty ownerName
 
         // update note
-        note.title = CryptoHelper.encrypt(findViewById<EditText>(R.id.title).text.toString(), ownerName)
-        note.content = CryptoHelper.encrypt(findViewById<EditText>(R.id.content).text.toString(), ownerName)
+        note.title = CryptoHelper.encrypt(findViewById<EditText>(R.id.title).text.toString(), ownerEmail)
+        note.content = CryptoHelper.encrypt(findViewById<EditText>(R.id.content).text.toString(), ownerEmail)
 
         if (note.id == -1) {
             // it's a new note
