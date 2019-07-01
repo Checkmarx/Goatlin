@@ -26,6 +26,7 @@ import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
 import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
 import com.cx.vulnerablekotlinapp.models.Account
 import kotlinx.android.synthetic.main.activity_login.*
+import java.lang.Exception
 import org.mindrot.jbcrypt.BCrypt
 
 /**
@@ -78,8 +79,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     /**
      * Attempts to sign in the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the errors are presented and
-     * no actual login attempt is made.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
      */
     private fun attemptLogin() {
         if (mAuthTask != null) {
@@ -220,17 +221,22 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 return true
             }
             else {
+                try {
+                    val account: Account = DatabaseHelper(applicationContext).getAccount(mUsername)
 
-                val account:Account = DatabaseHelper(applicationContext).getAccount(mUsername)
-                if (BCrypt.checkpw(mPassword, account.password)) {
-                    val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                    if (BCrypt.checkpw(mPassword, account.password)) {
+                        val prefs: SharedPreferences = applicationContext.getSharedPreferences(
                             applicationContext.packageName, Context.MODE_PRIVATE)
-                    val editor: SharedPreferences.Editor = prefs.edit()
+                        val editor: SharedPreferences.Editor = prefs.edit()
 
-                    editor.putInt("userId", account.id).apply()
+                        editor.putInt("userId", account.id).apply()
+                        editor.putString("userEmail", mUsername).apply()
+                    }
+
+                    return account.id > -1
+                } catch(e: Exception){
+                    return false
                 }
-
-                return account.id > -1
             }
         }
 
