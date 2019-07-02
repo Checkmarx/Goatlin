@@ -224,14 +224,16 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 try {
                     val account: Account = DatabaseHelper(applicationContext).getAccount(mUsername)
 
-                    if (BCrypt.checkpw(mPassword, account.password)) {
-                        val prefs: SharedPreferences = applicationContext.getSharedPreferences(
-                            applicationContext.packageName, Context.MODE_PRIVATE)
-                        val editor: SharedPreferences.Editor = prefs.edit()
-
-                        editor.putInt("userId", account.id).apply()
-                        editor.putString("userEmail", mUsername).apply()
+                    if (!BCrypt.checkpw(mPassword, account.password)) {
+                        return false
                     }
+
+                    val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                        applicationContext.packageName, Context.MODE_PRIVATE)
+                    val editor: SharedPreferences.Editor = prefs.edit()
+
+                    editor.putInt("userId", account.id).apply()
+                    editor.putString("userEmail", mUsername).apply()
 
                     return account.id > -1
                 } catch(e: Exception){
