@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.content.Context
 import android.content.Intent
@@ -13,12 +13,12 @@ import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.TextView
-import com.cx.vulnerablekotlinapp.api.model.Note
-import com.cx.vulnerablekotlinapp.api.service.Client
-import com.cx.vulnerablekotlinapp.helpers.CryptoHelper
-import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
-import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
-import com.cx.vulnerablekotlinapp.models.Account
+import com.cx.goatlin.api.model.Note
+import com.cx.goatlin.api.service.Client
+import com.cx.goatlin.helpers.CryptoHelper
+import com.cx.goatlin.helpers.DatabaseHelper
+import com.cx.goatlin.helpers.PreferenceHelper
+import com.cx.goatlin.models.Account
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
