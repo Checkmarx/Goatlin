@@ -1,9 +1,9 @@
-package com.cx.vulnerablekotlinapp.api.service
+package com.cx.goatlin.api.service
 
 import android.util.Base64
-import com.cx.vulnerablekotlinapp.api.model.Account
-import com.cx.vulnerablekotlinapp.api.model.Note
-import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
+import com.cx.goatlin.api.model.Account
+import com.cx.goatlin.api.model.Note
+import com.cx.goatlin.helpers.PreferenceHelper
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
