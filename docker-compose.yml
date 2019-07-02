@@ -1,20 +1,22 @@
 version: "3"
 services:
-  mongo:
+  db:
     image: mongo:latest
+    container_name: goatlin_db
     restart: always
     volumes:
-      - mongo:/data/db
+      - db:/data/db
     expose:
       - "27017"
   api:
     build: ./packages/services/api
     image: kotlin-scp-api:latest
+    container_name: goatlin_api
     depends_on:
-      - mongo
+      - db
     links:
-      - mongo
+      - db
     ports:
       - "8080:8080"
 volumes:
-  mongo:
+  db:
