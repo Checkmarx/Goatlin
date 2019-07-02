@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp.helpers
+package com.cx.goatlin.helpers
 
 import android.content.Context
 import android.content.SharedPreferences
