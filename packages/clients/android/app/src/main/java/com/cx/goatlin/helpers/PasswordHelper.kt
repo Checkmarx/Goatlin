@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp.helpers
+package com.cx.goatlin.helpers
 
 object PasswordHelper {
 

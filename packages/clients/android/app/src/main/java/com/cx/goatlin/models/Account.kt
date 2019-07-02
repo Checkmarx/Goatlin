@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp.models
+package com.cx.goatlin.models
 
 import android.database.Cursor
 

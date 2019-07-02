@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -22,9 +22,9 @@ import android.support.annotation.RequiresApi
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
-import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
-import com.cx.vulnerablekotlinapp.models.Account
+import com.cx.goatlin.helpers.DatabaseHelper
+import com.cx.goatlin.helpers.PreferenceHelper
+import com.cx.goatlin.models.Account
 import kotlinx.android.synthetic.main.activity_login.*
 import java.lang.Exception
 import org.mindrot.jbcrypt.BCrypt
