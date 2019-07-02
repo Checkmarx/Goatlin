@@ -3,17 +3,17 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.cx.vulnerablekotlinapp.ServerInfoActivity$GeneralPreferenceFragment"
+        android:fragment="com.cx.goatlin.ServerInfoActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.cx.vulnerablekotlinapp.ServerInfoActivity$NotificationPreferenceFragment"
+        android:fragment="com.cx.goatlin.ServerInfoActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.cx.vulnerablekotlinapp.ServerInfoActivity$DataSyncPreferenceFragment"
+        android:fragment="com.cx.goatlin.ServerInfoActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 

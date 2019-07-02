@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,10 +8,9 @@ import kotlinx.android.synthetic.main.activity_signup.*
 import android.widget.Toast
 import android.view.Gravity
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
-import com.cx.vulnerablekotlinapp.api.model.Account
-import com.cx.vulnerablekotlinapp.api.service.Client
-import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import com.cx.goatlin.api.model.Account
+import com.cx.goatlin.api.service.Client
+import com.cx.goatlin.helpers.DatabaseHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
