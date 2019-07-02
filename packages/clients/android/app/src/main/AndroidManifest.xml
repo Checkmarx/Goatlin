@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cx.vulnerablekotlinapp">
+    package="com.cx.goatlin">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name="com.cx.goatlin.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,34 +25,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="com.cx.goatlin.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SignupActivity"
+            android:name="com.cx.goatlin.SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".EditNoteActivity"
+            android:name="com.cx.goatlin.EditNoteActivity"
             android:label="@string/title_activity_notes_add"
             android:theme="@style/AppTheme.ActionBar" />
         <activity
-            android:name=".ServerInfoActivity"
+            android:name="com.cx.goatlin.ServerInfoActivity"
             android:label="@string/title_activity_server_info"
-            android:parentActivityName=".LoginActivity">
+            android:parentActivityName="com.cx.goatlin.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cx.vulnerablekotlinapp.LoginActivity" />
+                android:value="com.cx.goatlin.LoginActivity" />
         </activity>
 
         <provider
-            android:name=".AccountProvider"
-            android:authorities="com.cx.vulnerablekotlinapp.accounts"
+            android:name="com.cx.goatlin.AccountProvider"
+            android:authorities="com.cx.goatlin.accounts"
             android:enabled="true"
             android:exported="true" />
         <provider
-            android:name=".NotesProvider"
-            android:authorities="com.cx.vulnerablekotlinapp.notes"
+            android:name="com.cx.goatlin.NotesProvider"
+            android:authorities="com.cx.goatlin.notes"
             android:enabled="true"
             android:exported="true"></provider>
     </application>

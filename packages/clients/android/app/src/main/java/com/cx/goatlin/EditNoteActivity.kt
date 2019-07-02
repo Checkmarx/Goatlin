@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,10 +9,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
-import com.cx.vulnerablekotlinapp.helpers.CryptoHelper
-import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
-import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
-import com.cx.vulnerablekotlinapp.models.Note
+import com.cx.goatlin.helpers.CryptoHelper
+import com.cx.goatlin.helpers.DatabaseHelper
+import com.cx.goatlin.helpers.PreferenceHelper
+import com.cx.goatlin.models.Note
 
 class EditNoteActivity : AppCompatActivity() {
     lateinit var note: Note

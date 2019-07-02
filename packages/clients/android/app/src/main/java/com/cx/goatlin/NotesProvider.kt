@@ -1,28 +1,27 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
-import android.net.Uri
 import android.database.sqlite.SQLiteQueryBuilder
-import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
+import android.net.Uri
+import com.cx.goatlin.helpers.DatabaseHelper
 
+class NotesProvider : ContentProvider() {
 
-class AccountProvider : ContentProvider() {
+    private lateinit var database:DatabaseHelper
 
-    private lateinit var database: DatabaseHelper
-
-    private val ACCOUNTS = 1
-    private val ACCOUNTS_ID = 2
+    private val NOTES = 1
+    private val NOTES_ID = 2
 
 
     private val sURIMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
     init {
-        sURIMatcher.addURI(AUTHORITY, ACCOUNTS_TABLE, ACCOUNTS)
-        sURIMatcher.addURI(AUTHORITY, ACCOUNTS_TABLE + "/#",
-                ACCOUNTS_ID)
+        sURIMatcher.addURI(NotesProvider.AUTHORITY, NotesProvider.NOTES_TABLE, NOTES)
+        sURIMatcher.addURI(NotesProvider.AUTHORITY, NotesProvider.NOTES_TABLE + "/#",
+                NOTES_ID)
     }
 
     override fun onCreate(): Boolean {
@@ -32,16 +31,15 @@ class AccountProvider : ContentProvider() {
 
     override fun query(uri: Uri, projection: Array<String>?, selection: String?,
                        selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
-        //return this.database.listAccounts()
         val queryBuilder = SQLiteQueryBuilder()
-        queryBuilder.tables = ACCOUNTS_TABLE
+        queryBuilder.tables = NotesProvider.NOTES_TABLE
 
         val uriType = sURIMatcher.match(uri)
 
         when (uriType) {
-            ACCOUNTS_ID -> queryBuilder.appendWhere(ACCOUNTS_ID.toString() + "="
+            NOTES_ID -> queryBuilder.appendWhere(NOTES_ID.toString() + "="
                     + uri.lastPathSegment)
-            ACCOUNTS -> {
+            NOTES -> {
             }
             else -> throw IllegalArgumentException("Unknown URI")
         }
@@ -62,16 +60,15 @@ class AccountProvider : ContentProvider() {
 
         val id: Long
         when (uriType) {
-            ACCOUNTS -> id = sqlDB.insert(ACCOUNTS_TABLE, null, values)
+            NOTES -> id = sqlDB.insert(NotesProvider.NOTES_TABLE, null, values)
             else -> throw IllegalArgumentException("Unknown URI: " + uri)
         }
         context.contentResolver.notifyChange(uri, null)
-        return Uri.parse(ACCOUNTS_TABLE + "/" + id)
+        return Uri.parse(NotesProvider.NOTES_TABLE + "/" + id)
     }
 
-
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        throw UnsupportedOperationException("Not yet implemented")
+        TODO("Implement this to handle requests to delete one or more rows")
     }
 
     override fun getType(uri: Uri): String? {
@@ -81,15 +78,15 @@ class AccountProvider : ContentProvider() {
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?,
                         selectionArgs: Array<String>?): Int {
-        throw UnsupportedOperationException("Not yet implemented")
+        TODO("Implement this to handle requests to update one or more rows.")
     }
 
 
     companion object {
-        private val AUTHORITY = "com.cx.vulnerablekotlinapp.accounts"
-        private val ACCOUNTS_TABLE = "Accounts"
+        private val AUTHORITY = "com.cx.vulnerablekotlinapp.notes"
+        private val NOTES_TABLE = "Notes"
         val CONTENT_URI : Uri = Uri.parse("content://" + AUTHORITY + "/" +
-                ACCOUNTS_TABLE)
+                NOTES_TABLE)
         private val DATABASE_NAME = "data"
     }
 }

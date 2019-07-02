@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
