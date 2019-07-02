@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp
+package com.cx.goatlin
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -22,9 +22,9 @@ import android.support.annotation.RequiresApi
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.cx.vulnerablekotlinapp.helpers.DatabaseHelper
-import com.cx.vulnerablekotlinapp.helpers.PreferenceHelper
-import com.cx.vulnerablekotlinapp.models.Account
+import com.cx.goatlin.helpers.DatabaseHelper
+import com.cx.goatlin.helpers.PreferenceHelper
+import com.cx.goatlin.models.Account
 import kotlinx.android.synthetic.main.activity_login.*
 import java.lang.Exception
 
@@ -223,14 +223,16 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 try {
                     val account: Account = DatabaseHelper(applicationContext).getAccount(mUsername)
 
-                    if (mPassword == account.password) {
-                        val prefs: SharedPreferences = applicationContext.getSharedPreferences(
-                                applicationContext.packageName, Context.MODE_PRIVATE)
-                        val editor: SharedPreferences.Editor = prefs.edit()
-
-                        editor.putInt("userId", account.id).apply()
-                        editor.putString("userEmail", mUsername).apply()
+                    if (mPassword != account.password) {
+                        return false;
                     }
+
+                    val prefs: SharedPreferences = applicationContext.getSharedPreferences(
+                            applicationContext.packageName, Context.MODE_PRIVATE)
+                    val editor: SharedPreferences.Editor = prefs.edit()
+
+                    editor.putInt("userId", account.id).apply()
+                    editor.putString("userEmail", mUsername).apply()
 
                     return account.id > -1
                 } catch(e: Exception){

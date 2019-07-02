@@ -1,4 +1,4 @@
-package com.cx.vulnerablekotlinapp.models
+package com.cx.goatlin.models
 
 data class Note(var title: String, var content: String) {
     var id: Int = -1
