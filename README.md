@@ -50,7 +50,7 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program. If not, see https://www.gnu.org/licenses/.
 
-[1]: https://github.com/PauloASilva/Kotlin-SCP
+[1]: https://github.com/Checkmarx/Kotlin-SCP
 [2]: https://developer.android.com/studio/
 [3]: https://www.docker.com/
 [4]: https://docs.docker.com/compose/install/
