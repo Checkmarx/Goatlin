@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8u222-stretch
+    steps:
+      - checkout
+ 
+      - run:
+          name: Install CxCLI Plugin
+          command: |
+            wget -O ~/cxcli.zip https://download.checkmarx.com/9.0.0/Plugins/CxConsolePlugin-2020.3.1.zip
+            unzip ~/cxcli.zip -d ~/cxcli
+            chmod +x ~/cxcli/runCxConsole.sh
+
+      - run:
+          name: Execute CxSAST Scan
+          command: |
+            ~/cxcli/runCxConsole.sh Scan \
+              -CxServer $CX_SERVER \
+              -CxUser $CX_USER \
+              -CxPassword $CX_PASSWORD \
+              -ProjectName "$CX_TEAM\\$CX_PROJECT" \
+              -LocationType folder \
+              -LocationPath ~/project \
+              -ReportXML $CX_PROJECT-results.xml \
+              -ReportPDF $CX_PROJECT-results.pdf \
+              -Comment "git $CIRCLE_BRANCH@$CIRCLE_SHA1" \
+              -verbose
+
+      - run:
+          name: Moving Artifacts
+          command: |
+            mkdir ~/artifacts
+            mv ~/cxcli/$CX_PROJECT/* ~/artifacts
+
+      # Store the generated reports with the build logs in CircleCI
+      - store_artifacts:
+          path: ~/artifacts
+          destination: sast_results  
