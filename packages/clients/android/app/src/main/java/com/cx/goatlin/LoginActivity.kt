@@ -18,7 +18,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import java.util.ArrayList
 import android.content.*
+import android.content.pm.PackageManager
 import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -57,6 +60,14 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         sign_up_button.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun checkAndPromptUserToGrantPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                this,android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(android.Manifest.permission.READ_CONTACTS), 1)
         }
     }
 
@@ -164,6 +175,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<Cursor> {
+        checkAndPromptUserToGrantPermissions();
         return CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
