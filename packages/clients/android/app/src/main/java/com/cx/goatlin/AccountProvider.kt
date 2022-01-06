@@ -86,7 +86,7 @@ class AccountProvider : ContentProvider() {
 
 
     companion object {
-        private val AUTHORITY = "com.cx.vulnerablekotlinapp.accounts"
+        private val AUTHORITY = "com.cx.goatlin.accounts"
         private val ACCOUNTS_TABLE = "Accounts"
         val CONTENT_URI : Uri = Uri.parse("content://" + AUTHORITY + "/" +
                 ACCOUNTS_TABLE)
