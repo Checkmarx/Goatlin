@@ -83,7 +83,7 @@ class NotesProvider : ContentProvider() {
 
 
     companion object {
-        private val AUTHORITY = "com.cx.vulnerablekotlinapp.notes"
+        private val AUTHORITY = "com.cx.goatlin.notes"
         private val NOTES_TABLE = "Notes"
         val CONTENT_URI : Uri = Uri.parse("content://" + AUTHORITY + "/" +
                 NOTES_TABLE)
